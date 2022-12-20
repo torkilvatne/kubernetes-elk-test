@@ -1,0 +1,32 @@
+# See options here: https://github.com/bitnami/charts/tree/main/bitnami/redis/#installing-the-chart
+# Make the cache act like a memcached database
+# Read more here: https://redis.io/docs/manual/eviction/
+# More config info: https://redis.io/docs/manual/config/
+commonConfiguration: |-
+  maxmemory 100mb
+  maxmemory-policy allkeys-lru
+
+volumePermissions:
+  enabled: true
+
+master:
+  resources:
+    limits:
+      cpu: 50m
+      memory: 120Mi # Slightly more than the maxmemory conf
+  startupProbe:
+    enabled: true
+  updateStrategy:
+    type: RollingUpdate
+
+replica:
+  replicaCount: 2 
+  startupProbe:
+    enabled: true
+  updateStrategy:
+    type: RollingUpdate
+  
+  resources:
+    limits:
+      cpu: 50m
+      memory: 120Mi # Slightly more than the maxmemory conf
